@@ -1,0 +1,33 @@
+@startuml Hexagonal Architecture Workflow
+
+title Hexagonal Architecture Workflow
+
+actor Client
+participant InputAdapter
+participant ApplicationLayer
+participant DomainLayer
+participant OutputAdapter
+
+Client -> InputAdapter : request
+activate InputAdapter
+
+InputAdapter -> ApplicationLayer : C/Q start transaction
+activate ApplicationLayer
+
+ApplicationLayer -> DomainLayer : business logic
+activate DomainLayer
+DomainLayer --> ApplicationLayer : return
+deactivate DomainLayer
+
+ApplicationLayer -> OutputAdapter : write changes
+activate OutputAdapter
+OutputAdapter --> ApplicationLayer : return
+deactivate OutputAdapter
+
+ApplicationLayer --> InputAdapter : end transaction
+deactivate ApplicationLayer
+
+InputAdapter --> Client : response
+deactivate InputAdapter
+
+@enduml
