@@ -1,17 +1,20 @@
 @startuml Hexagonal Architecture Workflow
 
-title Hexagonal Architecture Workflow
+autonumber "<b>[00]"
 
 actor Client
+box
 participant InputAdapter
 participant ApplicationLayer
 participant DomainLayer
 participant OutputAdapter
+end box
+participant Service
 
 Client -> InputAdapter : request
 activate InputAdapter
 
-InputAdapter -> ApplicationLayer : C/Q start transaction
+InputAdapter -> ApplicationLayer : C/Q transaction
 activate ApplicationLayer
 
 ApplicationLayer -> DomainLayer : business logic
@@ -21,6 +24,9 @@ deactivate DomainLayer
 
 ApplicationLayer -> OutputAdapter : write changes
 activate OutputAdapter
+
+OutputAdapter <--> Service : invoke
+
 OutputAdapter --> ApplicationLayer : return
 deactivate OutputAdapter
 
